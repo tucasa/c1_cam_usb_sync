@@ -1,0 +1,15 @@
+<launch>
+    <arg name="camera_name"   default="front_center"/>
+    <arg name="video_device"  default="/dev/video0"/>
+    <arg name="frame_rate"    default="10"/>
+
+    <node name="$(arg camera_name)" pkg="usb_cam" type="usb_cam_node" output="screen" ns="camera">
+        <param name="video_device"  value="$(arg video_device)"/>
+        <param name="image_width"   value="1920"/>
+        <param name="image_height"  value="1280"/>
+        <param name="pixel_format"  value="uyvy"/>
+        <param name="framerate"     value="$(arg frame_rate)"/>
+    </node>
+
+</launch>
+

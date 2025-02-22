@@ -1,0 +1,25 @@
+<launch>
+    <arg name="camera_name_1"   default="front_center"/>
+    <arg name="camera_name_2"   default="front_right"/>
+    <arg name="video_device_1"  default="/dev/video0"/>
+    <arg name="video_device_2"  default="/dev/video2"/>
+    <arg name="frame_rate"      default="10"/>
+
+    <node name="$(arg camera_name_1)" pkg="usb_cam" type="usb_cam_node" output="screen" ns="camera">
+        <param name="video_device"  value="$(arg video_device_1)"/>
+        <param name="image_width"   value="1920"/>
+        <param name="image_height"  value="1280"/>
+        <param name="pixel_format"  value="uyvy"/>
+        <param name="framerate"     value="$(arg frame_rate)"/>
+    </node>
+
+    <node name="camera/$(arg camera_name_2)" pkg="usb_cam" type="usb_cam_node" output="screen" ns="camera">
+        <param name="video_device"  value="$(arg video_device_2)"/>
+        <param name="image_width"   value="1920"/>
+        <param name="image_height"  value="1280"/>
+        <param name="pixel_format"  value="uyvy"/>
+        <param name="framerate"     value="$(arg frame_rate)"/>
+    </node>
+    
+</launch>
+
