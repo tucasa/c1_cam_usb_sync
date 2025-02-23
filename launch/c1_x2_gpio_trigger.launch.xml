@@ -1,0 +1,56 @@
+<launch>
+	<arg name="camera_name_1"        default="front_center"/>
+	<arg name="camera_name_2"        default="front_right"/>
+	<arg name="video_device_1"       default="/dev/video0"/>
+	<arg name="video_device_2"       default="/dev/video2"/>
+	<arg name="gpio_name_1"          default="orin_devkit_pin18"/>
+	<arg name="gpio_name_2"          default="orin_devkit_pin32"/>
+	<arg name="phase_1"              default="0.0"/>
+	<arg name="phase_2"              default="60.0"/>
+	<arg name="frame_rate"           default="10.0"/>
+  <arg name="use_sensor_data_qos"  default="True"/>
+
+  <group>
+    <push-ros-namespace namespace="camera/$(var camera_name_1)"/>
+    <node pkg="v4l2_camera" exec="v4l2_camera_node" name="v4l2_camera" output="screen">
+      <param name="video_device" value="$(var video_device_1)"/>
+      <param name="pixel_format" value="uyvy"/>
+      <param name="output_encoding" value="yuv422"/>
+      <param name="image_size" value="[1920, 1280]"/>
+      <param name="use_v4l2_buffer_timestamps" value="False"/>
+      <param name="timestamp_offset" value="0"/>
+      <param name="camera_frame_id" value="$(var camera_name_1)"/>
+      <param name="use_sensor_data_qos" value="$(var use_sensor_data_qos)" type="bool"/>
+      <param name="publish_rate" value="-1.0"/>
+    </node>
+
+    <include file="$(find-pkg-share sensor_trigger)/launch/sensor_trigger.launch.xml">
+      <arg name="gpio_name" value="$(var gpio_name_1)"/>
+      <arg name="phase" value="$(var phase_1)"/>
+      <arg name="frame_rate" value="$(var frame_rate)"/>
+    </include>
+  </group>
+
+  <group>
+    <push-ros-namespace namespace="camera/$(var camera_name_2)"/>
+    <node pkg="v4l2_camera" exec="v4l2_camera_node" name="v4l2_camera" output="screen">
+      <param name="video_device" value="$(var video_device_2)"/>
+      <param name="pixel_format" value="uyvy"/>
+      <param name="output_encoding" value="yuv422"/>
+      <param name="image_size" value="[1920, 1280]"/>
+      <param name="use_v4l2_buffer_timestamps" value="False"/>
+      <param name="timestamp_offset" value="0"/>
+      <param name="camera_frame_id" value="$(var camera_name_2)"/>
+      <param name="use_sensor_data_qos" value="$(var use_sensor_data_qos)" type="bool"/>
+      <param name="publish_rate" value="-1.0"/>
+    </node>
+
+    <include file="$(find-pkg-share sensor_trigger)/launch/sensor_trigger.launch.xml">
+      <arg name="gpio_name" value="$(var gpio_name_2)"/>
+      <arg name="phase" value="$(var phase_2)"/>
+      <arg name="frame_rate" value="$(var frame_rate)"/>
+    </include>
+  </group>
+
+</launch>
+

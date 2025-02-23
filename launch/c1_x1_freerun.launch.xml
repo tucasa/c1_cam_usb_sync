@@ -1,0 +1,21 @@
+<launch>
+  <arg name="camera_name"   default="front_center"/>
+  <arg name="video_device"  default="/dev/video0"/>
+  <arg name="publish_rate" default="10.0"/>
+  <arg name="use_sensor_data_qos" default="True"/>
+
+  <push-ros-namespace namespace="camera/$(var camera_name)"/>
+  <node pkg="v4l2_camera" exec="v4l2_camera_node" name="v4l2_camera" output="screen">
+    <param name="video_device" value="$(var video_device)"/>
+    <param name="pixel_format" value="uyvy"/>
+    <param name="output_encoding" value="yuv422"/>
+    <param name="image_size" value="[1920, 1280]"/>
+    <param name="use_v4l2_buffer_timestamps" value="False"/>
+    <param name="timestamp_offset" value="0"/>
+    <param name="camera_frame_id" value="$(var camera_name)"/>
+    <param name="use_sensor_data_qos" value="$(var use_sensor_data_qos)" type="bool"/>
+    <param name="publish_rate" value="$(var publish_rate)"/>
+  </node>
+
+</launch>
+
